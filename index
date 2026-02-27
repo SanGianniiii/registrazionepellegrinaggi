@@ -94,7 +94,7 @@
 </div>
 
 <script>
-    const scriptURL = 'INSERISCI_URL_APP_SCRIPT_QUI'; // <--- INCOLLA QUI L'URL DEL TUO SCRIPT
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwEYp80aRGz-4DyqXPcq4j9dF_WaFIsuVmDZV7N09xG7mGlG4Kxqu-gEfqmhSZkM51zJA/exec'; // <--- INCOLLA QUI L'URL DEL TUO SCRIPT
 
     function nextStep(stepIndex) {
         document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
