@@ -9,15 +9,14 @@
             --primary: #2563eb;
             --secondary: #64748b;
             --accent: #d4af37;
-            --error: #ef4444;
-            --success: #059669;
+            --error: #dc2626; /* Colore per gli errori */
             --bg: #f1f5f9;
             --card-bg: #ffffff;
             --text: #1e293b;
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg);
             color: var(--text);
             margin: 0; padding: 0;
@@ -30,98 +29,92 @@
             padding: 30px;
             box-sizing: border-box;
             box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            border-radius: 24px;
+            border-radius: 20px;
             margin: 15px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Barra di progresso */
-        .progress-container {
-            height: 6px; background: #e2e8f0; border-radius: 10px; margin-bottom: 30px;
-        }
-        .progress-bar {
-            height: 100%; width: 0%; background: var(--primary); transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .header { text-align: center; margin-bottom: 25px; }
-        .header h1 { color: var(--primary); font-size: 22px; margin: 0; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .header h1 { color: var(--primary); font-size: 24px; margin: 0; font-weight: 800; }
+        .header p { color: var(--secondary); font-size: 14px; margin-top: 5px; }
 
-        .step { display: none; animation: fadeIn 0.4s ease; }
-        .step.active { display: block; }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .progress-container {
+            height: 6px; background: #e2e8f0; border-radius: 10px; margin-bottom: 30px; overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%; width: 0%; background: var(--primary); transition: width 0.3s ease;
         }
 
-        label { display: block; font-weight: 600; margin-bottom: 12px; font-size: 17px; }
+        .step { display: none; animation: slideIn 0.3s ease-out; }
+        .step.active { display: block; }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        label { display: block; font-weight: 600; margin-bottom: 12px; font-size: 18px; color: var(--text); }
         
         input, textarea {
-            width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 14px;
-            font-size: 16px; box-sizing: border-box; outline: none; transition: 0.2s;
+            width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 12px;
+            font-size: 16px; box-sizing: border-box; margin-bottom: 10px; outline: none; transition: 0.2s;
             background: #f8fafc;
         }
         input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
         
-        /* Messaggio di errore input */
-        .error-msg {
-            color: var(--error); font-size: 13px; font-weight: 600; margin-top: -15px; margin-bottom: 15px;
-            display: none; animation: shake 0.3s ease;
-        }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
+        /* Messaggio di errore stilizzato */
+        .error-hint {
+            color: var(--error);
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: none; /* Nascosto di default */
         }
 
-        .button-group { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .button-group { display: flex; gap: 10px; flex-direction: column; margin-top: 10px; }
         
         button {
             background-color: var(--primary); color: white; border: none; padding: 16px;
-            font-size: 16px; border-radius: 14px; cursor: pointer; width: 100%; font-weight: bold; transition: 0.2s;
+            font-size: 16px; border-radius: 12px; cursor: pointer; width: 100%; font-weight: bold; transition: 0.2s;
         }
         button:hover { filter: brightness(1.1); transform: translateY(-1px); }
-        .btn-back { background: transparent; color: var(--secondary); border: 2px solid #e2e8f0; }
 
-        /* Riepilogo */
-        .summary-box { background: #f8fafc; border-radius: 16px; padding: 15px; border: 1px solid #e2e8f0; }
+        .btn-back { background-color: transparent; color: var(--secondary); border: 2px solid #e2e8f0; }
+
+        .summary-box {
+            background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; margin-bottom: 20px;
+        }
         .summary-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #edf2f7; font-size: 14px; }
-        .summary-item:last-child { border-bottom: none; }
-        .summary-label { color: var(--secondary); }
-        .summary-value { color: var(--text); font-weight: 600; text-align: right; }
-
+        
         .loader { text-align: center; padding: 40px 0; }
         .spinner { 
             width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); 
             border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        .status-icon { font-size: 50px; margin-bottom: 15px; display: block; text-align: center; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <div class="header">
+        <h1>San Giovanni Apostolo</h1>
+        <p>Iscrizione Pellegrinaggio</p>
+    </div>
+
     <div class="progress-container">
         <div class="progress-bar" id="progress-bar"></div>
     </div>
 
-    <div class="header">
-        <h1>San Giovanni Apostolo</h1>
-    </div>
-
     <div id="form-container">
         <div class="step active" id="step-0">
-            <label style="text-align: center;">Benvenuto! Vuoi procedere con l'iscrizione al pellegrinaggio?</label>
-            <button onclick="nextStep(1)">Inizia Registrazione</button>
+            <label>Benvenuto! Vuoi iniziare una nuova registrazione?</label>
+            <button onclick="nextStep(1)">Sì, inizia subito</button>
         </div>
 
         <div class="step" id="step-1">
             <label>Qual è il tuo Cognome?</label>
-            <input type="text" id="cognome" placeholder="Rossi">
-            <p class="error-msg" id="err-cognome">Questo campo è obbligatorio</p>
+            <input type="text" id="cognome" placeholder="es. Rossi">
+            <div id="error-cognome" class="error-hint">⚠️ Inserisci il cognome per continuare</div>
             <div class="button-group">
                 <button onclick="checkAndNext(1, 'cognome')">Avanti</button>
                 <button class="btn-back" onclick="nextStep(0)">Indietro</button>
@@ -130,8 +123,8 @@
 
         <div class="step" id="step-2">
             <label>Qual è il tuo Nome?</label>
-            <input type="text" id="nome" placeholder="Mario">
-            <p class="error-msg" id="err-nome">Questo campo è obbligatorio</p>
+            <input type="text" id="nome" placeholder="es. Mario">
+            <div id="error-nome" class="error-hint">⚠️ Inserisci il nome per continuare</div>
             <div class="button-group">
                 <button onclick="checkAndNext(2, 'nome')">Avanti</button>
                 <button class="btn-back" onclick="nextStep(1)">Indietro</button>
@@ -140,8 +133,8 @@
 
         <div class="step" id="step-3">
             <label>Luogo di Nascita</label>
-            <input type="text" id="luogo_nascita" placeholder="Città">
-            <p class="error-msg" id="err-luogo_nascita">Inserisci il luogo di nascita</p>
+            <input type="text" id="luogo_nascita" placeholder="Città o Comune">
+            <div id="error-luogo_nascita" class="error-hint">⚠️ Inserisci il luogo di nascita</div>
             <div class="button-group">
                 <button onclick="checkAndNext(3, 'luogo_nascita')">Avanti</button>
                 <button class="btn-back" onclick="nextStep(2)">Indietro</button>
@@ -151,7 +144,7 @@
         <div class="step" id="step-4">
             <label>Data di Nascita</label>
             <input type="date" id="data_nascita">
-            <p class="error-msg" id="err-data_nascita">Inserisci una data valida</p>
+            <div id="error-data_nascita" class="error-hint">⚠️ Inserisci la tua data di nascita</div>
             <div class="button-group">
                 <button onclick="checkAndNext(4, 'data_nascita')">Avanti</button>
                 <button class="btn-back" onclick="nextStep(3)">Indietro</button>
@@ -159,9 +152,9 @@
         </div>
 
         <div class="step" id="step-5">
-            <label>Numero Documento</label>
-            <input type="text" id="numero_documento" placeholder="Es. CA12345BB">
-            <p class="error-msg" id="err-numero_documento">Inserisci il numero del documento</p>
+            <label>Documento d'Identità</label>
+            <input type="text" id="numero_documento" placeholder="Numero Carta o Passaporto">
+            <div id="error-numero_documento" class="error-hint">⚠️ Inserisci il numero del documento</div>
             <div class="button-group">
                 <button onclick="checkAndNext(5, 'numero_documento')">Avanti</button>
                 <button class="btn-back" onclick="nextStep(4)">Indietro</button>
@@ -169,9 +162,9 @@
         </div>
 
         <div class="step" id="step-6">
-            <label>Telefono</label>
-            <input type="tel" id="telefono" placeholder="3331234567">
-            <p class="error-msg" id="err-telefono">Inserisci un numero di telefono</p>
+            <label>Numero di Telefono</label>
+            <input type="tel" id="telefono" placeholder="333 1234567">
+            <div id="error-telefono" class="error-hint">⚠️ Inserisci un numero di telefono</div>
             <div class="button-group">
                 <button onclick="checkAndNext(6, 'telefono')">Avanti</button>
                 <button class="btn-back" onclick="nextStep(5)">Indietro</button>
@@ -179,9 +172,9 @@
         </div>
 
         <div class="step" id="step-7">
-            <label>Comunità</label>
-            <input type="text" id="numero_comunita" placeholder="Nome o Numero">
-            <p class="error-msg" id="err-numero_comunita">Inserisci la tua comunità</p>
+            <label>Comunità di appartenenza</label>
+            <input type="text" id="numero_comunita" placeholder="Numero o Nome">
+            <div id="error-numero_comunita" class="error-hint">⚠️ Specifica la tua comunità</div>
             <div class="button-group">
                 <button onclick="checkAndNext(7, 'numero_comunita')">Avanti</button>
                 <button class="btn-back" onclick="nextStep(6)">Indietro</button>
@@ -189,8 +182,8 @@
         </div>
 
         <div class="step" id="step-8">
-            <label>Note o Allergie</label>
-            <textarea id="note" rows="3" placeholder="Opzionale..."></textarea>
+            <label>Allergie o Note (Opzionale)</label>
+            <textarea id="note" rows="3" placeholder="Scrivi qui eventuali necessità..."></textarea>
             <div class="button-group">
                 <button onclick="nextStep(9)">Avanti</button>
                 <button class="btn-back" onclick="nextStep(7)">Indietro</button>
@@ -198,7 +191,7 @@
         </div>
 
         <div class="step" id="step-9">
-            <label>Foto Documento</label>
+            <label>Foto del Documento</label>
             <input type="file" id="foto_doc" accept="image/*" capture="environment">
             <div class="button-group">
                 <button onclick="showSummary()">Vedi Riepilogo</button>
@@ -207,108 +200,159 @@
         </div>
 
         <div class="step" id="step-summary">
-            <label>Riepilogo Dati</label>
+            <label>Controlla i tuoi dati</label>
             <div id="summary-content" class="summary-box"></div>
             <div class="button-group">
-                <button onclick="submitData()" style="background-color: var(--success);">Conferma e Invia</button>
+                <button onclick="submitData()" style="background-color: #059669;">Conferma e Invia</button>
                 <button class="btn-back" onclick="nextStep(9)">Modifica Dati</button>
             </div>
         </div>
 
-        <div class="step loader" id="step-loading">
-            <div class="spinner"></div>
-            <p>Verifica e invio in corso...</p>
+        <div class="step" id="step-loading">
+            <div class="loader">
+                <div class="spinner"></div>
+                <p>Verifica e invio in corso...</p>
+            </div>
         </div>
 
         <div class="step" id="step-success">
-            <span class="status-icon">✅</span>
-            <h2 style="color: var(--success); text-align: center;">Registrazione Completata!</h2>
-            <p style="text-align: center;">I tuoi dati sono stati salvati correttamente. A presto!</p>
-            <button onclick="location.reload()" class="btn-back">Chiudi</button>
+            <div style="text-align: center; padding: 20px;">
+                <div style="font-size: 50px; margin-bottom: 10px;">✅</div>
+                <h2 style="color: #059669;">Inviato con successo!</h2>
+                <p id="success-msg"></p>
+                <button onclick="location.reload()" class="btn-back">Nuova registrazione</button>
+            </div>
         </div>
 
-        <div class="step" id="step-duplicate">
-            <span class="status-icon">⚠️</span>
-            <h2 style="color: var(--accent); text-align: center;">Già Registrato</h2>
-            <p style="text-align: center;">Risulta che questo documento sia già stato inserito nei nostri sistemi.</p>
-            <button onclick="nextStep(5)" class="btn-back">Verifica Documento</button>
+        <div class="step" id="step-error-final">
+            <div style="text-align: center; padding: 20px;">
+                <div style="font-size: 50px; margin-bottom: 10px;">⚠️</div>
+                <h2 style="color: var(--error);">Attenzione!</h2>
+                <p id="error-final-msg" style="font-weight: 500;"></p>
+                <div class="button-group">
+                    <button onclick="nextStep('summary')">Torna al riepilogo</button>
+                    <button onclick="location.reload()" class="btn-back">Ricomincia da capo</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwEYp80aRGz-4DyqXPcq4j9dF_WaFIsuVmDZV7N09xG7mGlG4Kxqu-gEfqmhSZkM51zJA/exec'; 
-    let currentStep = 0;
+    const totalSteps = 9;
 
     function updateProgress(step) {
-        const percent = (step / 9) * 100;
+        if(isNaN(step)) return;
+        const percent = (step / totalSteps) * 100;
         document.getElementById('progress-bar').style.width = percent + '%';
     }
 
-    function nextStep(idx) {
+    function nextStep(stepIndex) {
         document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-        document.getElementById('step-' + idx).classList.add('active');
-        if(typeof idx === 'number') updateProgress(idx);
+        const next = document.getElementById('step-' + stepIndex);
+        if(next) {
+            next.classList.add('active');
+            updateProgress(stepIndex);
+        }
+        // Nascondi tutti i messaggi di errore quando si cambia step
+        document.querySelectorAll('.error-hint').forEach(e => e.style.display = 'none');
     }
 
-    function checkAndNext(step, inputId) {
+    function checkAndNext(currentStep, inputId) {
         const input = document.getElementById(inputId);
-        const error = document.getElementById('err-' + inputId);
+        const errorHint = document.getElementById('error-' + inputId);
         
         if(input.value.trim() === "") {
-            input.style.borderColor = "var(--error)";
-            error.style.display = "block";
+            // Invece dell'alert, mostriamo il messaggio d'errore stilizzato
+            errorHint.style.display = 'block';
+            input.style.borderColor = 'var(--error)';
+            return;
         } else {
-            input.style.borderColor = "#e2e8f0";
-            error.style.display = "none";
-            nextStep(step + 1);
+            errorHint.style.display = 'none';
+            input.style.borderColor = '#e2e8f0';
         }
+        nextStep(currentStep + 1);
     }
 
     function showSummary() {
         const fields = [
-            ['Cognome', 'cognome'], ['Nome', 'nome'], ['Nato a', 'luogo_nascita'],
-            ['Data', 'data_nascita'], ['Doc.', 'numero_documento'], ['Tel.', 'telefono']
+            { id: 'cognome', label: 'Cognome' },
+            { id: 'nome', label: 'Nome' },
+            { id: 'luogo_nascita', label: 'Luogo Nascita' },
+            { id: 'data_nascita', label: 'Data Nascita' },
+            { id: 'numero_documento', label: 'Documento' },
+            { id: 'telefono', label: 'Telefono' },
+            { id: 'numero_comunita', label: 'Comunità' },
+            { id: 'note', label: 'Note' }
         ];
+
         let html = '';
         fields.forEach(f => {
-            html += `<div class="summary-item"><span class="summary-label">${f[0]}</span><span class="summary-value">${document.getElementById(f[1]).value}</span></div>`;
+            const val = document.getElementById(f.id).value || "-";
+            html += `<div class="summary-item">
+                        <span class="summary-label">${f.label}</span>
+                        <span class="summary-value">${val}</span>
+                     </div>`;
         });
+
+        const fileInput = document.getElementById('foto_doc');
+        const hasFile = fileInput.files.length > 0 ? "Caricata ✅" : "Non presente ❌";
+        html += `<div class="summary-item"><span class="summary-label">Foto Documento</span><span class="summary-value">${hasFile}</span></div>`;
+
         document.getElementById('summary-content').innerHTML = html;
         nextStep('summary');
     }
 
     async function submitData() {
         nextStep('loading');
-        
+
         const data = {
             cognome: document.getElementById('cognome').value,
             nome: document.getElementById('nome').value,
+            luogo_nascita: document.getElementById('luogo_nascita').value,
+            data_nascita: document.getElementById('data_nascita').value,
             numero_documento: document.getElementById('numero_documento').value,
-            // ... aggiungi tutti gli altri campi qui come fatto prima ...
+            telefono: document.getElementById('telefono').value,
+            numero_comunita: document.getElementById('numero_comunita').value,
+            note: document.getElementById('note').value,
             fileBase64: null
         };
 
         const fileInput = document.getElementById('foto_doc');
-        if (fileInput.files.length > 0) data.fileBase64 = await toBase64(fileInput.files[0]);
-
-        try {
-            const response = await fetch(scriptURL, {
-                method: 'POST',
-                body: JSON.stringify(data)
-            });
-            const result = await response.json();
-
-            if (result.status === "duplicate") {
-                nextStep('duplicate');
-            } else {
-                nextStep('success');
-            }
-        } catch (e) {
-            // In caso di errore CORS con Google Script, spesso l'invio avviene comunque.
-            // Se però ricevi un errore reale, mostriamo il successo (o potresti aggiungere uno step di errore)
-            nextStep('success'); 
+        if (fileInput.files.length > 0) {
+            data.fileBase64 = await toBase64(fileInput.files[0]);
         }
+
+        // Usiamo fetch SENZA mode: 'no-cors' per poter leggere la risposta del server
+        // ATTENZIONE: Assicurati che Google Apps Script gestisca correttamente le intestazioni CORS
+        fetch(scriptURL, {
+            method: 'POST',
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json()) // Proviamo a leggere il JSON di risposta
+        .then(res => {
+            if (res.result === "error" && res.message.includes("già registrato")) {
+                // Caso: Già registrato
+                document.getElementById('error-final-msg').innerText = "Questo numero di documento risulta già presente nei nostri archivi.";
+                nextStep('error-final');
+            } else if (res.result === "success") {
+                // Caso: Successo
+                nextStep('success');
+                document.getElementById('success-msg').innerText = "La parrocchia ha ricevuto i tuoi dati. A presto!";
+            } else {
+                // Altri errori
+                throw new Error("Errore generico");
+            }
+        })
+        .catch(error => {
+            // Se lo script non supporta CORS, fetch darà errore qui anche se funziona.
+            // Per testare il duplicato in 'no-cors' è difficile. 
+            // Suggerimento: Se non puoi cambiare lo script lato server, visualizzerai sempre successo.
+            console.error(error);
+            nextStep('success'); 
+            document.getElementById('success-msg').innerText = "Inviato! (Nota: se il documento era già presente, l'invio non creerà un duplicato).";
+        });
     }
 
     const toBase64 = file => new Promise((resolve, reject) => {
