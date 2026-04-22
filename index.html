@@ -6,114 +6,275 @@
     <title>Registrazione Pellegrinaggio</title>
     <style>
         :root {
-            --primary: #2c3e50; /* Blu scuro elegante */
-            --gold: #d4af37;    /* Oro per un tocco ecclesiastico/solenne */
-            --bg: #f8f9fa;
+            --primary: #2563eb;    /* Blu moderno */
+            --secondary: #64748b;  /* Grigio per tasti secondari */
+            --accent: #d4af37;     /* Oro parrocchiale */
+            --bg: #f1f5f9;
+            --card-bg: #ffffff;
+            --text: #1e293b;
         }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg);
+            color: var(--text);
             margin: 0; padding: 0;
             display: flex; justify-content: center; align-items: center; min-height: 100vh;
         }
+
         .container {
-            background: white; width: 100%; max-width: 500px; min-height: 100vh;
-            display: flex; flex-direction: column; padding: 20px; box-sizing: border-box;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        @media (min-width: 600px) {
-            .container { min-height: auto; border-radius: 15px; padding: 40px; }
-        }
-        .header { text-align: center; margin-bottom: 30px; }
-        .header h1 { color: var(--primary); font-size: 22px; margin: 0; }
-        .header p { color: #666; font-size: 14px; margin-top: 5px; }
-        
-        .step { display: none; animation: fadeIn 0.4s ease; }
-        .step.active { display: block; }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            background: var(--card-bg);
+            width: 100%; max-width: 450px;
+            padding: 30px;
+            box-sizing: border-box;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border-radius: 20px;
+            margin: 15px;
         }
 
-        label { display: block; font-weight: bold; color: var(--primary); margin-bottom: 10px; font-size: 18px;}
-        input, textarea {
-            width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 8px;
-            font-size: 16px; box-sizing: border-box; margin-bottom: 20px; outline: none; transition: 0.3s;
+        .header { text-align: center; margin-bottom: 25px; }
+        .header h1 { color: var(--primary); font-size: 24px; margin: 0; font-weight: 800; }
+        .header p { color: var(--secondary); font-size: 14px; margin-top: 5px; }
+
+        /* Barra di progresso */
+        .progress-container {
+            height: 6px; background: #e2e8f0; border-radius: 10px; margin-bottom: 30px; overflow: hidden;
         }
-        input:focus, textarea:focus { border-color: var(--gold); }
+        .progress-bar {
+            height: 100%; width: 0%; background: var(--primary); transition: width 0.3s ease;
+        }
+
+        .step { display: none; animation: slideIn 0.3s ease-out; }
+        .step.active { display: block; }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        label { display: block; font-weight: 600; margin-bottom: 12px; font-size: 18px; color: var(--text); }
+        
+        input, textarea {
+            width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 12px;
+            font-size: 16px; box-sizing: border-box; margin-bottom: 20px; outline: none; transition: 0.2s;
+            background: #f8fafc;
+        }
+        input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
+        
+        .button-group { display: flex; gap: 10px; flex-direction: column; }
         
         button {
-            background-color: var(--primary); color: white; border: none; padding: 15px 20px;
-            font-size: 16px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; transition: 0.3s;
+            background-color: var(--primary); color: white; border: none; padding: 16px;
+            font-size: 16px; border-radius: 12px; cursor: pointer; width: 100%; font-weight: bold; transition: 0.2s;
         }
-        button:hover { background-color: #1a252f; }
-        .btn-outline { background-color: white; color: var(--primary); border: 2px solid var(--primary); margin-top: 10px;}
-        
-        .loader { display: none; text-align: center; font-weight: bold; color: var(--primary); }
+        button:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        button:active { transform: translateY(0); }
+
+        .btn-back { background-color: transparent; color: var(--secondary); border: 2px solid #e2e8f0; }
+        .btn-back:hover { background-color: #f1f5f9; border-color: #cbd5e1; }
+
+        /* Riepilogo */
+        .summary-box {
+            background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; margin-bottom: 20px;
+        }
+        .summary-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #edf2f7; font-size: 14px; }
+        .summary-item:last-child { border-bottom: none; }
+        .summary-label { color: var(--secondary); font-weight: 500; }
+        .summary-value { color: var(--text); font-weight: 600; text-align: right; }
+
+        .loader { text-align: center; padding: 40px 0; }
+        .spinner { 
+            width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); 
+            border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h1>Parrocchia San Giovanni Apostolo</h1>
-        <p>Registrazione Pellegrinaggi</p>
+        <h1>San Giovanni Apostolo</h1>
+        <p>Iscrizione Pellegrinaggio</p>
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
     </div>
 
     <div id="form-container">
         <div class="step active" id="step-0">
-            <label>Vuoi effettuare una nuova registrazione per il pellegrinaggio?</label>
-            <button onclick="nextStep(1)">Sì, inizia</button>
+            <label>Benvenuto! Vuoi iniziare una nuova registrazione?</label>
+            <button onclick="nextStep(1)">Sì, inizia subito</button>
         </div>
 
-        <div class="step" id="step-1"><label>Qual è il tuo Cognome?</label><input type="text" id="cognome"><button onclick="checkAndNext(1, 'cognome')">Avanti</button></div>
-        <div class="step" id="step-2"><label>Qual è il tuo Nome?</label><input type="text" id="nome"><button onclick="checkAndNext(2, 'nome')">Avanti</button></div>
-        <div class="step" id="step-3"><label>Luogo di Nascita</label><input type="text" id="luogo_nascita"><button onclick="checkAndNext(3, 'luogo_nascita')">Avanti</button></div>
-        <div class="step" id="step-4"><label>Data di Nascita</label><input type="date" id="data_nascita"><button onclick="checkAndNext(4, 'data_nascita')">Avanti</button></div>
-        <div class="step" id="step-5"><label>Numero del Documento (Carta d'Identità/Passaporto)</label><input type="text" id="numero_documento"><button onclick="checkAndNext(5, 'numero_documento')">Avanti</button></div>
-        <div class="step" id="step-6"><label>Numero di Telefono</label><input type="tel" id="telefono"><button onclick="checkAndNext(6, 'telefono')">Avanti</button></div>
-        <div class="step" id="step-7"><label>Numero o Nome Comunità</label><input type="text" id="numero_comunita"><button onclick="checkAndNext(7, 'numero_comunita')">Avanti</button></div>
-        <div class="step" id="step-8"><label>Allergie o Note utili (Opzionale)</label><textarea id="note"></textarea><button onclick="nextStep(9)">Avanti</button></div>
+        <div class="step" id="step-1">
+            <label>Qual è il tuo Cognome?</label>
+            <input type="text" id="cognome" placeholder="es. Rossi">
+            <div class="button-group">
+                <button onclick="checkAndNext(1, 'cognome')">Avanti</button>
+                <button class="btn-back" onclick="nextStep(0)">Indietro</button>
+            </div>
+        </div>
+
+        <div class="step" id="step-2">
+            <label>Qual è il tuo Nome?</label>
+            <input type="text" id="nome" placeholder="es. Mario">
+            <div class="button-group">
+                <button onclick="checkAndNext(2, 'nome')">Avanti</button>
+                <button class="btn-back" onclick="nextStep(1)">Indietro</button>
+            </div>
+        </div>
+
+        <div class="step" id="step-3">
+            <label>Luogo di Nascita</label>
+            <input type="text" id="luogo_nascita" placeholder="Città o Comune">
+            <div class="button-group">
+                <button onclick="checkAndNext(3, 'luogo_nascita')">Avanti</button>
+                <button class="btn-back" onclick="nextStep(2)">Indietro</button>
+            </div>
+        </div>
+
+        <div class="step" id="step-4">
+            <label>Data di Nascita</label>
+            <input type="date" id="data_nascita">
+            <div class="button-group">
+                <button onclick="checkAndNext(4, 'data_nascita')">Avanti</button>
+                <button class="btn-back" onclick="nextStep(3)">Indietro</button>
+            </div>
+        </div>
+
+        <div class="step" id="step-5">
+            <label>Documento d'Identità</label>
+            <input type="text" id="numero_documento" placeholder="Numero Carta o Passaporto">
+            <div class="button-group">
+                <button onclick="checkAndNext(5, 'numero_documento')">Avanti</button>
+                <button class="btn-back" onclick="nextStep(4)">Indietro</button>
+            </div>
+        </div>
+
+        <div class="step" id="step-6">
+            <label>Numero di Telefono</label>
+            <input type="tel" id="telefono" placeholder="333 1234567">
+            <div class="button-group">
+                <button onclick="checkAndNext(6, 'telefono')">Avanti</button>
+                <button class="btn-back" onclick="nextStep(5)">Indietro</button>
+            </div>
+        </div>
+
+        <div class="step" id="step-7">
+            <label>Comunità di appartenenza</label>
+            <input type="text" id="numero_comunita" placeholder="Numero o Nome">
+            <div class="button-group">
+                <button onclick="checkAndNext(7, 'numero_comunita')">Avanti</button>
+                <button class="btn-back" onclick="nextStep(6)">Indietro</button>
+            </div>
+        </div>
+
+        <div class="step" id="step-8">
+            <label>Allergie o Note (Opzionale)</label>
+            <textarea id="note" rows="3" placeholder="Scrivi qui eventuali necessità..."></textarea>
+            <div class="button-group">
+                <button onclick="nextStep(9)">Avanti</button>
+                <button class="btn-back" onclick="nextStep(7)">Indietro</button>
+            </div>
+        </div>
 
         <div class="step" id="step-9">
-            <label>Carica una foto del tuo documento</label>
+            <label>Foto del Documento</label>
             <input type="file" id="foto_doc" accept="image/*" capture="environment">
-            <p style="font-size: 12px; color: #666;">I dati saranno trattati con massima riservatezza.</p>
-            <button onclick="submitData()">Invia Registrazione</button>
+            <div class="button-group">
+                <button onclick="showSummary()">Vedi Riepilogo</button>
+                <button class="btn-back" onclick="nextStep(8)">Indietro</button>
+            </div>
         </div>
 
-        <div class="step loader" id="step-loading">
-            <p>Elaborazione in corso... Attendi, potrebbe volerci qualche secondo per caricare la foto.</p>
+        <div class="step" id="step-summary">
+            <label>Controlla i tuoi dati</label>
+            <div id="summary-content" class="summary-box"></div>
+            <div class="button-group">
+                <button onclick="submitData()" style="background-color: #059669;">Conferma e Invia</button>
+                <button class="btn-back" onclick="nextStep(9)">Modifica Dati</button>
+            </div>
         </div>
+
+        <div class="step" id="step-loading">
+            <div class="loader">
+                <div class="spinner"></div>
+                <p>Invio in corso...<br><small>Stiamo caricando anche la foto.</small></p>
+            </div>
+        </div>
+
         <div class="step" id="step-success">
-            <label style="color: green; text-align: center;">✅ Completato!</label>
-            <p id="success-msg" style="text-align: center;"></p>
+            <div style="text-align: center; padding: 20px;">
+                <div style="font-size: 50px; margin-bottom: 10px;">✅</div>
+                <h2 style="color: #059669;">Inviato con successo!</h2>
+                <p id="success-msg"></p>
+                <button onclick="location.reload()" class="btn-back">Nuova registrazione</button>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwEYp80aRGz-4DyqXPcq4j9dF_WaFIsuVmDZV7N09xG7mGlG4Kxqu-gEfqmhSZkM51zJA/exec'; // <--- INCOLLA QUI L'URL DEL TUO SCRIPT
+    const scriptURL = 'INSERISCI_QUI_IL_TUO_URL'; 
+    const totalSteps = 9;
+
+    function updateProgress(step) {
+        const percent = (step / totalSteps) * 100;
+        document.getElementById('progress-bar').style.width = percent + '%';
+    }
 
     function nextStep(stepIndex) {
         document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-        document.getElementById('step-' + stepIndex).classList.add('active');
+        const next = document.getElementById('step-' + stepIndex);
+        if(next) {
+            next.classList.add('active');
+            updateProgress(stepIndex);
+        }
     }
 
     function checkAndNext(currentStep, inputId) {
         const val = document.getElementById(inputId).value.trim();
         if(val === "") {
-            alert("Per favore, compila questo campo.");
+            alert("Per favore, compila questo campo prima di proseguire.");
             return;
         }
         nextStep(currentStep + 1);
     }
 
+    function showSummary() {
+        const fields = [
+            { id: 'cognome', label: 'Cognome' },
+            { id: 'nome', label: 'Nome' },
+            { id: 'luogo_nascita', label: 'Luogo Nascita' },
+            { id: 'data_nascita', label: 'Data Nascita' },
+            { id: 'numero_documento', label: 'Documento' },
+            { id: 'telefono', label: 'Telefono' },
+            { id: 'numero_comunita', label: 'Comunità' },
+            { id: 'note', label: 'Note' }
+        ];
+
+        let html = '';
+        fields.forEach(f => {
+            const val = document.getElementById(f.id).value || "-";
+            html += `<div class="summary-item">
+                        <span class="summary-label">${f.label}</span>
+                        <span class="summary-value">${val}</span>
+                     </div>`;
+        });
+
+        const fileInput = document.getElementById('foto_doc');
+        const hasFile = fileInput.files.length > 0 ? "Caricata ✅" : "Non presente ❌";
+        html += `<div class="summary-item"><span class="summary-label">Foto Documento</span><span class="summary-value">${hasFile}</span></div>`;
+
+        document.getElementById('summary-content').innerHTML = html;
+        nextStep('summary');
+    }
+
     async function submitData() {
         nextStep('loading');
 
-        // Raccogli tutti i dati
         const data = {
             cognome: document.getElementById('cognome').value,
             nome: document.getElementById('nome').value,
@@ -133,25 +294,20 @@
 
         fetch(scriptURL, {
             method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // Evita blocchi CORS di Google
+            mode: 'no-cors', // Spesso necessario con Google Apps Script
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         })
-        .then(response => response.json())
-        .then(result => {
+        .then(() => {
             nextStep('success');
-            const msgEl = document.getElementById('success-msg');
-            msgEl.innerText = result.message;
-            if (result.status === "error") {
-                msgEl.style.color = "red";
-            }
+            document.getElementById('success-msg').innerText = "La parrocchia ha ricevuto i tuoi dati. A presto!";
         })
         .catch(error => {
-            alert("Errore di connessione!");
-            nextStep(9); // Torna indietro
+            alert("Errore di connessione! Riprova.");
+            nextStep('summary');
         });
     }
 
-    // Funzione per convertire l'immagine in testo per inviarla
     const toBase64 = file => new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
