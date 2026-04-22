@@ -330,18 +330,18 @@
             method: 'POST',
             body: JSON.stringify(data)
         })
-        .then(response => response.json()) // Proviamo a leggere il JSON di risposta
+        .then(response => response.json()) 
         .then(res => {
-            if (res.result === "error" && res.message.includes("già registrato")) {
-                // Caso: Già registrato
-                document.getElementById('error-final-msg').innerText = "Questo numero di documento risulta già presente nei nostri archivi.";
+            // PRIMA ERA: if (res.result === "error" && res.message.includes("già registrato"))
+            if (res.status === "error") { 
+                // Caso: Già registrato o altro errore dal server
+                document.getElementById('error-final-msg').innerText = res.message;
                 nextStep('error-final');
-            } else if (res.result === "success") {
+            } else if (res.status === "success") {
                 // Caso: Successo
                 nextStep('success');
-                document.getElementById('success-msg').innerText = "La parrocchia ha ricevuto i tuoi dati. A presto!";
+                document.getElementById('success-msg').innerText = res.message;
             } else {
-                // Altri errori
                 throw new Error("Errore generico");
             }
         })
