@@ -275,34 +275,44 @@
         nextStep(currentStep + 1);
     }
 
-    function showSummary() {
-        const fields = [
-            { id: 'cognome', label: 'Cognome' },
-            { id: 'nome', label: 'Nome' },
-            { id: 'luogo_nascita', label: 'Luogo Nascita' },
-            { id: 'data_nascita', label: 'Data Nascita' },
-            { id: 'numero_documento', label: 'Documento' },
-            { id: 'telefono', label: 'Telefono' },
-            { id: 'numero_comunita', label: 'Comunità' },
-            { id: 'note', label: 'Note' }
-        ];
+   function showSummary() {
+    const fields = [
+        { id: 'cognome', label: 'Cognome' },
+        { id: 'nome', label: 'Nome' },
+        { id: 'luogo_nascita', label: 'Luogo Nascita' },
+        { id: 'data_nascita', label: 'Data Nascita' },
+        { id: 'numero_documento', label: 'Documento' },
+        { id: 'telefono', label: 'Telefono' },
+        { id: 'numero_comunita', label: 'Comunità' },
+        { id: 'note', label: 'Note' }
+    ];
 
-        let html = '';
-        fields.forEach(f => {
-            const val = document.getElementById(f.id).value || "-";
-            html += `<div class="summary-item">
-                        <span class="summary-label">${f.label}</span>
-                        <span class="summary-value">${val}</span>
-                     </div>`;
-        });
+    let html = '';
+    fields.forEach(f => {
+        let val = document.getElementById(f.id).value || "-";
 
-        const fileInput = document.getElementById('foto_doc');
-        const hasFile = fileInput.files.length > 0 ? "Caricata ✅" : "Non presente ❌";
-        html += `<div class="summary-item"><span class="summary-label">Foto Documento</span><span class="summary-value">${hasFile}</span></div>`;
+        // --- LOGICA PER LA DATA ITALIANA ---
+        if (f.id === 'data_nascita' && val !== "-") {
+            const parti = val.split("-"); // Divide AAAA-MM-GG
+            if (parti.length === 3) {
+                val = `${parti[2]}/${parti[1]}/${parti[0]}`; // Diventa GG/MM/AAAA
+            }
+        }
+        // -----------------------------------
 
-        document.getElementById('summary-content').innerHTML = html;
-        nextStep('summary');
-    }
+        html += `<div class="summary-item">
+                    <span class="summary-label">${f.label}</span>
+                    <span class="summary-value">${val}</span>
+                 </div>`;
+    });
+
+    const fileInput = document.getElementById('foto_doc');
+    const hasFile = fileInput.files.length > 0 ? "Caricata ✅" : "Non presente ❌";
+    html += `<div class="summary-item"><span class="summary-label">Foto Documento</span><span class="summary-value">${hasFile}</span></div>`;
+
+    document.getElementById('summary-content').innerHTML = html;
+    nextStep('summary');
+}
 
     async function submitData() {
         nextStep('loading');
